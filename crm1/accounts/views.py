@@ -6,7 +6,14 @@ def home(request):
     orders = Order.objects.all()
     customers = Customer.objects.all()
 
-    context = {'orders' : orders , 'customers' : customers }
+    total_customers = customers.count()
+    total_orders = orders.count()
+
+    deliverd = orders.filter(status ='Delivered').count()
+    pending = orders.filter(status = 'Pending').count()
+
+    context = {'orders' : orders , 'customers' : customers  , 
+    'total_orders': total_orders , 'deliverd' : deliverd , 'pending' : pending}
     return render(request , 'accounts/dashboards.html' , context)
 
 def products(request):
