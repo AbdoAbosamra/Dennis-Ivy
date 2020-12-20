@@ -40,3 +40,22 @@ def createOrder(request):
             return redirect('/')
     context = {'form': form}
     return render(request , 'accounts/order_form.html' ,context)
+
+
+def UpdateOrder(request,pk):
+    order = Order.objects.get(id = pk)
+    form  = OrderForm(instance=order)    
+    if request.method == 'POST':    
+        form = OrderForm(request.POST ,instance=order)
+        if form.is_valid():
+            form.save()
+    context = {'form': form}
+    return render(request , 'accounts/order_form.html' ,context)
+
+def deleteOrder(request,pk):
+    order = Order.objects.get(id = pk)
+    if request.method == "POST":
+        order.delete()
+        return redirect('/')
+    context = {'item': order}
+    return render(request , 'accounts/delete.html' ,context)
