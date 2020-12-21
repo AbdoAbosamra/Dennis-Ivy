@@ -1,6 +1,7 @@
 from django.shortcuts import render ,redirect
 from django.http import HttpResponse
-from .models import *
+from django.forms import inlineformset_factory
+from .models import Product ,Customer , Order #Error from no thing if i make it "*"
 from .forms import OrderForm
 # Create your views here.
 def home(request):
@@ -20,8 +21,8 @@ def home(request):
 def products(request):
 	products = Product.objects.all()
 	return render(request , 'accounts/products.html' , {'products': products})
-def customer(request ,pk):
-    customer = Customer.objects.get(id=pk)
+def customer(request ,pk_test):
+    customer = Customer.objects.get(id=pk_test)
 
     
     orders = customer.order_set.all()
@@ -31,14 +32,17 @@ def customer(request ,pk):
     context = {'orders' : orders , 'customer' : customer  , 'order_count' : order_count}
     return render(request , 'accounts/customer.html' ,context)
 
-def createOrder(request):
-    form = OrderForm()
+def createOrder(request ,pk):
+    OrderFormSet = inlineformset_factory(Customer , Order ,fields=('product','status') , extra=10)
+    customer = Customer.objects.get(id=pk)
+    #form = OrderForm(initial={'customer' : customer})   #for inatial value of the customer when reload the page.
+    formset = OrderFormSet(queryset=Order.objects.none(),instance= customer) # To remove inatial in the form and start with none
     if request.method == 'POST':
-        form = OrderForm(request.POST)
-        if form.is_valid():
-            form.save()
+        formset = OrderFormSet(request.POST , instance= customer )
+        if formset.is_valid():
+            formset.save()
             return redirect('/')
-    context = {'form': form}
+    context = {'formset': formset}
     return render(request , 'accounts/order_form.html' ,context)
 
 
