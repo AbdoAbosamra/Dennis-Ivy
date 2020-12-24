@@ -1,5 +1,11 @@
 {% load static  %}
-
+<style>
+  #hello-mes{
+    font-size: 18px;
+    color: #fff;
+    margin-right: 20px;
+  }
+</style>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <a  href = "{% url 'home' %}" > <image src="{% static 'images/logo.png' %}"></image></a>
   
@@ -18,4 +24,6 @@
         
       </ul>
     </div>
+    <span id = 'hello-mes'>Hello , {{request.user}}</span>
+    <span id = 'hello-mes'><a href="{% url 'logout' %}">Logout</a></span>
   </nav>
