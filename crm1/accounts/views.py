@@ -59,6 +59,9 @@ def home(request):
     'total_orders': total_orders , 'deliverd' : deliverd , 'pending' : pending}
     return render(request , 'accounts/dashboards.html' , context)
 @login_required(login_url='login') # if iam not loin before willnot allow me to accss before login.
+def userPage(request):
+    context = {}
+    return render(request , 'accounts/user.html' , context)
 
 def products(request):
 	products = Product.objects.all()
