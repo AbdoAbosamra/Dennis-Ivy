@@ -25,7 +25,7 @@ def registerPage(request):
     context = {'form' : form}
     return render(request , 'accounts/register.html' , context)
 def loginPage(request):
-    if request.user.is_authenticated:
+    if request.user.is_authenticated: # ! if you are already do login  You can not go again to loin page .
         return redirect('home')
     else:
         if request.method == 'POST':
